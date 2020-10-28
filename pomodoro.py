@@ -11,25 +11,20 @@ inky_display = InkyPHAT("red")
 inky_display.rotation = 0 # avoid unnecessary swap
 
 # set start time and pomodoro cycle
-# long break = 35 min to simplify cycle length for now...
 start_time = 8 * 60 * 60 # seconds
-cycle_length = 2.5 * 60 * 60 # 2 1/2 hours per cycle
-pomodoro = 30 * 60 # typical length
+pomodoro = 25 * 60 # typical length
 small_break = 5 * 60
 long_break = 25 * 60
-cycle_length = (pomodoro - small_break) * 4 + 3 * small_break + long_break
-break_point = pomodoro - small_break
+cycle_length = (pomodoro + small_break) * 3 +  pomodoro + long_break
 
 def get_pomodoro_time(curr_time):
     time_since_start = curr_time - start_time
     completed_cycles = int(time_since_start // cycle_length)
-    pt_in_cycle = time_since_start - completed_cycles * cycle_length 
-    num_tomato = int(pt_in_cycle // pomodoro)
-    print(num_tomato)
-    # if pt_in_cycle % pomodoro == break_point || pt_in_cycle % pomodoro == 0.0 # trigger change
+    pt_in_cycle = time_since_start - completed_cycles * cycle_length
+    num_tomato = int(pt_in_cycle // (pomodoro + small_break))
 
-    if int(pt_in_cycle % pomodoro >= break_point) and (num_tomato < 3):
-        print("break time!")
+    if int(pt_in_cycle % (pomodoro + small_break)  >= pomodoro) and (num_tomato < 3):
+        print(num_tomato, " break time!")
     elif num_tomato == 4:
         print("long break time!")
     else:
@@ -57,12 +52,11 @@ def get_long_break_text():
 def update_display():
     pass
 
-curr_time = 10 * 60 * 60 + 0 * 60
-
 # need to set that cron only refreshes the display if change in values? store values in file maybe? or better yet, only if remainder is 0?
-get_pomodoro_time(curr_time)
+for time in test_times:
+    get_pomodoro_time(time)
 
-img = get_tomato_image(0)
+# img = get_tomato_image(0)
 
-inky_display.set_image(img)
-inky_display.show()
+# inky_display.set_image(img)
+# inky_display.show()

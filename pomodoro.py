@@ -38,10 +38,13 @@ def get_pomodoro_time(start_time):
     pt_in_cycle = time_since_start - completed_cycles * cycle_length
     num_tomato = int(pt_in_cycle // (pomodoro + small_break))
     if int(pt_in_cycle % (pomodoro + small_break)  >= pomodoro) and (num_tomato < 3):
+        print(num_tomato, "break time!")
         return (num_tomato, "break time!")
     elif (pt_in_cycle > (4 * pomodoro + 3 * small_break)):
+        print(num_tomato, "long break time")
         return (num_tomato, "looooong break time!")
     else:
+        print(num_tomato, "still working")
         return (num_tomato, "still working")
 
 def get_tomato_image(inky_display, image_num):
@@ -99,7 +102,7 @@ inky_display.rotation = 0 # avoid unnecessary swap
 # default start values
 tomato = 0
 cycle = "still working"
-start_time = int(datetime.utcnow().timestamp()) % 86500
+start_time = int(datetime.utcnow().timestamp()) % 86400
 
 if os.path.exists(PATH + '/status.json'):
     with open(PATH + '/status.json', 'r') as fh:
@@ -111,6 +114,10 @@ else:
     status = {'num_tomato': tomato,
               'status_cycle': cycle,
               'start_time': start_time}
+    # reset display
+    img = get_tomato_image(inky_display, 0)
+    inky_display.set_image(img)
+    inky_display.show()
     with open(PATH + '/status.json', 'w') as fh:
         json.dump(status, fh)
 

@@ -28,7 +28,7 @@ def format_line(font, msg):
 
 def get_pomodoro_time(start_time):
     # set pomodoro cycle length
-    pomodoro = 25 * 60 # typical length
+    pomodoro = 25 * 60 # typical length in seconds
     small_break = 5 * 60
     long_break = 25 * 60
     cycle_length = (pomodoro + small_break) * 3 +  pomodoro + long_break
@@ -38,13 +38,10 @@ def get_pomodoro_time(start_time):
     pt_in_cycle = time_since_start - completed_cycles * cycle_length
     num_tomato = int(pt_in_cycle // (pomodoro + small_break))
     if int(pt_in_cycle % (pomodoro + small_break)  >= pomodoro) and (num_tomato < 3):
-        print(num_tomato, "break time")
         return (num_tomato, "break time!")
-    elif num_tomato == 4:
-        print(num_tomato, "long break time")
+    elif (pt_in_cycle > (4 * pomodoro + 3 * small_break)):
         return (num_tomato, "looooong break time!")
     else:
-        print(num_tomato, "still working")
         return (num_tomato, "still working")
 
 def get_tomato_image(inky_display, image_num):
@@ -79,16 +76,17 @@ def get_text_image(inky_display, break_text):
 def check_display(inky_display, tomato, cycle, start_time):
     num_tomato, text = get_pomodoro_time(start_time)
     # check if status has changed
-    # if num_tomato == tomato and text == cycle:
-    if False:
+    if num_tomato == tomato and text == cycle:
         return
     else:
         if text == "still working":
             img = get_tomato_image(inky_display, num_tomato)
         else:
             img = get_text_image(inky_display, text)
-        # update status.json
-        out_dict = {'num_tomato': num_tomato, 'status_cycle': text, 'start_time': start_time}
+        # update status
+        out_dict = {'num_tomato': num_tomato,
+                    'status_cycle': text,
+                    'start_time': start_time}
         with open(PATH + '/status.json', 'w') as fh:
             json.dump(out_dict, fh)
         inky_display.set_image(img)
@@ -98,19 +96,22 @@ def check_display(inky_display, tomato, cycle, start_time):
 inky_display = InkyPHAT("red")
 inky_display.rotation = 0 # avoid unnecessary swap
 
+# default start values
+tomato = 0
+cycle = "still working"
+start_time = int(datetime.utcnow().timestamp()) % 86500
+
 if os.path.exists(PATH + '/status.json'):
     with open(PATH + '/status.json', 'r') as fh:
         status = json.load(fh)
-        status_tomato = status["num_tomato"]
-        status_cycle = status["status_cycle"]
+        tomato = status["num_tomato"]
+        cycle = status["status_cycle"]
         start_time = status['start_time']
-        check_display(inky_display, status_tomato, status_cycle, start_time)
 else:
-    status_tomato = 0
-    status_cycle = "still working"
-    start_time = int(datetime.utcnow().timestamp()) % 86400
-    check_display(inky_display, status_tomato, status_cycle, start_time)
-    status = {'num_tomato': 0, 'status_cycle': 'still working', 'start_time': start_time}
+    status = {'num_tomato': tomato,
+              'status_cycle': cycle,
+              'start_time': start_time}
     with open(PATH + '/status.json', 'w') as fh:
         json.dump(status, fh)
 
+check_display(inky_display, tomato, cycle, start_time)

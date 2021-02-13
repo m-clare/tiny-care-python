@@ -96,7 +96,7 @@ def check_display(inky_display, tomato, cycle, start_time):
         inky_display.show()
 
 # Global Inky Properties
-inky_display = InkyPHAT("red")
+inky_display = InkyWHAT("red")
 inky_display.rotation = 0 # avoid unnecessary swap
 
 # default start values

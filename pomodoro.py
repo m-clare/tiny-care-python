@@ -52,10 +52,11 @@ def get_tomato_image(inky_display, image_num):
     Use PIL library to open tomato image and transpose for inky display
     """
     rel_path = os.path.join(PATH, "assets/tomato_" + str(image_num) + ".png")
-    img = Image.open(rel_path).resize(inky_display.resolution)
+    new_resolution = (106, 52)
+    img = Image.open(rel_path).resize(new_resolution)
     canvas = Image.new("P", (inky_display.rows, inky_display.cols))
     canvas.paste(img, (0,0)) # no offset of image
-    canvas = canvas.transpose(Image.ROTATE_90)
+    # canvas = canvas.transpose(Image.ROTATE_90)
     return canvas
 
 def get_text_image(inky_display, break_text):
@@ -100,7 +101,7 @@ inky_display = InkyWHAT("red")
 inky_display.rotation = 0 # avoid unnecessary swap
 
 # default start values
-tomato = 0
+tomato = 4
 cycle = "still working"
 start_time = int(datetime.utcnow().timestamp()) % 86400
 

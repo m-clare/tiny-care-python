@@ -1,7 +1,7 @@
 import os
 import numpy
 import json
-from inky import InkyPHAT
+from inky import InkyWHAT
 from PIL import Image, ImageDraw, ImageFont
 from font_fredoka_one import FredokaOne
 from datetime import datetime

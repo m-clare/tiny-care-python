@@ -24,7 +24,7 @@ def horizontal_bar_labels(categories):
         font_family="Dank Mono")
 
     # hide axes
-    for axis in subplots['layout']:
+   fp for axis in subplots['layout']:
         if axis.startswith('yaxis') or axis.startswith('xaxis'):
             subplots['layout'][axis]['visible'] = False
 

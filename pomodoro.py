@@ -52,21 +52,11 @@ def get_tomato_image(inky_display, image_num):
     Use PIL library to open tomato image and transpose for inky display
     """
     rel_path = os.path.join(PATH, "assets/tomato_" + str(image_num) + ".png")
-    img = Image.open(rel_path)
-    img = img.resize((img.width // 2, img.height // 2))
-    canvas = Image.new("RGB", (inky_display.cols, inky_display.rows))
-    print(inky_display.WIDTH)
-    print(inky_display.HEIGHT)
-    print(inky_display.rows)
-    print(inky_display.cols)
-
-    print(canvas.size)
-    pixels = canvas.load()
-    for x in range(canvas.size[0]):
-        for y in range(canvas.size[1]):
-            pixels[x, y] = (256, 256, 256)
-        canvas.paste(img, (4,4)) # no offset of image
-    canvas.show()
+    new_resolution = (106, 52)
+    img = Image.open(rel_path).resize(new_resolution)
+    canvas = Image.new("P", (inky_display.rows, inky_display.cols))
+    canvas.paste(img, (0,0)) # no offset of image
+    # canvas = canvas.transpose(Image.ROTATE_90)
     return canvas
 
 def get_text_image(inky_display, break_text):
@@ -111,10 +101,10 @@ inky_display.rotation = 180
 
 canvas = get_tomato_image(inky_display, 0)
 
-# # default start values
-# tomato = 0
-# cycle = "still working"
-# start_time = int(datetime.utcnow().timestamp()) % 86400
+# default start values
+tomato = 4
+cycle = "still working"
+start_time = int(datetime.utcnow().timestamp()) % 86400
 
 # if os.path.exists(PATH + '/status.json'):
 #     with open(PATH + '/status.json', 'r') as fh:

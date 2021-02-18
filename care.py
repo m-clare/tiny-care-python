@@ -1,12 +1,13 @@
 import os
 from inky import InkyWHAT
 from PIL import Image, ImageDraw, ImageFont
+from font_fredoka_one import FredokaOne
 from datetime import datetime as dt
 from twitterbot import *
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-ttf = ImageFont.truetype("/Users/maryannewachter/Library/Fonts/DankMono-Italic.otf", 24)
+ttf = ImageFont.truetype(FredokaOne, 24)
 inky_display = InkyWHAT("red")
 black = inky_display.BLACK
 red = inky_display.RED
@@ -37,7 +38,7 @@ def get_text_image(text, width, height):
     _, line_height = font.getsize(lines[0])
     centered_y = (height / 2) - ((line_height * len(lines)) / 2)
     height_counter = centered_y
-    img = set_blank_background(width, height)
+    img = Image.new("P", (width, height))
     draw = ImageDraw.Draw(img)
     for i in range(0, len(lines)):
         msg = lines[i]

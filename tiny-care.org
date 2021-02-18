@@ -1,0 +1,7 @@
+* Tiny Care Python Roadmap
+** Inspirational Quotes 
+** Weather
+** Git mode and Org mode 
+*** Git mode
+*** Org mode
+*** 

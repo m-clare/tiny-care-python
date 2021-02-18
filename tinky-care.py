@@ -7,12 +7,18 @@ from twitterbot import *
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-ttf = ImageFont.truetype(FredokaOne, 24)
+try:
+    ttf = ImageFont.truetype('./assets/DankMono-Italic.otf', 24)
+except:
+    ttf = ImageFont.truetype(FredokaOne, 24)
+
+# Inky display information
 inky_display = InkyWHAT("red")
 black = inky_display.BLACK
 red = inky_display.RED
 white = inky_display.WHITE
 inky_display.rotation = 180
+
 
 def format_line(font, msg, width):
     lines = []
@@ -32,6 +38,7 @@ def format_line(font, msg, width):
         lines.append(cur_line)
     return lines
 
+
 def get_text_image(text, width, height):
     font = ttf
     lines = format_line(font, text, width)
@@ -49,6 +56,7 @@ def get_text_image(text, width, height):
         height_counter += h
     return img
 
+
 def set_blank_background(width, height):
     canvas = Image.new("RGB", (width, height))
     pixels = canvas.load()
@@ -57,17 +65,20 @@ def set_blank_background(width, height):
             pixels[x, y] = (256, 256, 256)
     return canvas
 
+
 def assemble_canvas(org, tweet, pomodoro, inky_display):
     canvas = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
     # insert org
-    canvas.paste(org, (0, 0)) # no offset
+    canvas.paste(org, (0, 0))  # no offset
     # insert tweet
     canvas.paste(tweet, (org.width, 0))
     # insert pomodoro
     canvas.paste(tomato, (org.width, inky_display.HEIGHT - tomato.size[1]))
     return canvas
 
-org_accomplishments = Image.open('./test.png')
+# Generate org file image
+
+org_accomplishments = Image.open('./org.png')
 ow, oh = org_accomplishments.size
 tomato = Image.open('./assets/tomato_3.png')
 tw, th = tomato.size

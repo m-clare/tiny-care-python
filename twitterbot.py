@@ -1,14 +1,16 @@
-import twitter
 import os
 import re
 import emoji
+import twitter
 from dotenv import load_dotenv
 
-load_dotenv('./sample.env')
+load_dotenv('./assets/mclare.env')
+
 
 def strip_emoji(text):
     new_text = re.sub(emoji.get_emoji_regexp(), r"", text)
     return new_text
+
 
 def get_recent_care_tweet():
     TTC_BOT = os.getenv("TTC_BOT")
